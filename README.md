@@ -1,73 +1,87 @@
 # RBAC Task Management System
 
-A premium dark glassmorphic full-stack web application demonstrating **Role-Based Access Control (RBAC)**. Built using React.js (Vite), Node.js (Express), and MongoDB Atlas.
-
-## Tech Stack
-* **Frontend**: React (Vite) + Lucide Icons + Custom CSS Layout Variables
-* **Backend**: Node.js + Express
-* **Database**: MongoDB Atlas (Cloud NoSQL)
-* **Authentication**: JSON Web Token (JWT) with bcryptjs password encryption
+A premium **Role-Based Access Control (RBAC)** full-stack web application. Designed with a clean, flat corporate white theme featuring sharp corners (`border-radius: 0px`), responsive layout adjustments for all viewport sizes, and comprehensive security controls.
 
 ---
 
-## Access Roles & System Permissions
+## Tech Stack
+* **Frontend**: React (Vite) + Lucide Icons + Custom CSS Layout Variables (Flat Corporate Theme)
+* **Backend**: Node.js + Express (REST API)
+* **Database**: MongoDB Atlas (Cloud NoSQL Cluster)
+* **Authentication**: JSON Web Token (JWT) + bcryptjs password encryption
 
-The system handles three distinct roles:
+---
+
+## Access Roles & Demo Credentials
+
+The system seeds the database with the following demo operatives:
 
 1. **Admin (Rishu Admin)**
-   * **Permissions**: Access to all tasks, full task CRUD (Create, Read, Update, Delete), change roles of other users, delete users, and view statistics.
+   * **Permissions**: Full Task CRUD (Create, Read, Update, Delete), Operative Directory Management (Change roles, delete users/revoke access), view Statistics, and access to System Audit Logs.
    * **Demo Email**: `admin@braviching.com`
    * **Password**: `password123`
 
 2. **Manager (Abhinit Manager)**
-   * **Permissions**: Access to all tasks, task CRUD (Create, Read, Update, Delete). *Cannot modify user roles or delete users.*
+   * **Permissions**: Full Task CRUD (Create, Read, Update, Delete) and Statistics. *Cannot modify user roles or delete users/revoke access.*
    * **Demo Email**: `manager@braviching.com`
    * **Password**: `password123`
 
-3. **User (John Developer / Sarah Tester)**
-   * **Permissions**: Can only view tasks assigned specifically to them. Can only change the **Status** (Pending, In Progress, Completed) of their own tasks. *Cannot create/delete tasks or change other fields.*
-   * **Demo Email**: `user@braviching.com` (John) / `sarah@braviching.com` (Sarah)
+3. **User (Amit Sharma / Sneha Patel)**
+   * **Permissions**: Access to see tasks assigned specifically to them. Can only change the **Status** (Pending, In Progress, Completed) of their own tasks. *Cannot create/delete tasks or change assignments.*
+   * **Demo Email**: `user@braviching.com` (Amit Sharma) / `sarah@braviching.com` (Sneha Patel)
    * **Password**: `password123`
+
+---
+
+## Live Deployment Details
+
+* **Backend Live URL (Render)**: `https://rbac-assignment-vun8.onrender.com`
+* **Database Cluster (MongoDB Atlas)**: Configured with custom whitelist rule `0.0.0.0/0` to allow secure access from Render nodes.
 
 ---
 
 ## Local Setup & Installation
 
-Follow these steps to run both backend and frontend locally:
-
 ### 1. Backend Setup
-1. Open a terminal and navigate to the backend folder:
+1. Navigate to the backend directory:
    ```bash
    cd backend
    ```
-2. Install the backend dependencies:
+2. Install dependencies:
    ```bash
    npm install
    ```
-3. Run the development server (runs on `http://localhost:5000`):
+3. Configure your `.env` file (e.g. `MONGODB_URI`, `JWT_SECRET`, `PORT`).
+4. Seed the database with initial users and tasks:
+   ```bash
+   npm run seed
+   ```
+5. Run the server in development mode (runs on `http://localhost:5000`):
    ```bash
    npm run dev
    ```
 
 ### 2. Frontend Setup
-1. Open a new terminal and navigate to the frontend folder:
+1. Navigate to the frontend directory:
    ```bash
    cd frontend
    ```
-2. Install the frontend dependencies:
+2. Install dependencies:
    ```bash
    npm install
    ```
-3. Start the Vite React development server:
+3. Set your environment variables in `.env` (e.g. `VITE_API_URL=http://localhost:5000`).
+4. Start the Vite development server:
    ```bash
    npm run dev
    ```
-4. Open the displayed URL in your browser (usually `http://localhost:5173`).
+5. Open `http://localhost:5173` in your browser.
 
 ---
 
-## Core Security & Design Assumptions
+## Key Features & Customizations
 
-* **Database Security**: All passwords are encrypted on-write using standard `bcrypt` hashing before saving to the Atlas collection.
-* **Server-Side Authorization**: API routes (such as updating user roles or deleting tasks) are guarded by JWT decoding. The server validates that the requesting token belongs to an authorized user role (`Admin` or `Manager`) before processing database modifications.
-* **Responsive Fluid Design**: Built with a customizable dark CSS grid palette utilizing micro-animations, glassmorphic card overlays, and dynamic visual indicators.
+1. **Flat Corporate White Theme**: Built using clean white cards, subtle borders, high contrast elements, and straight sharp edges (`border-radius: 0px`).
+2. **Dynamic Role-Based UI Rendering**: Header tab panels, Action buttons (like Create Task or Revoke Access), and data visibility are strictly dictated by the user's role.
+3. **Audit Log System**: Tracks administrative operations, login trails, and task adjustments.
+4. **Responsive Mobile layout**: Optimised via modern CSS media queries to stack smoothly on mobile viewports (e.g. smartphones and tablets) without element overlapping or container breakage.
