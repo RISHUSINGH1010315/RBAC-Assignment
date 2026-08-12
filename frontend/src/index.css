@@ -112,3 +112,71 @@ input:focus, select:focus, textarea:focus {
   align-items: center;
   justify-content: center;
 }
+
+/* Responsive Dashboard Header styling */
+.dashboard-header {
+  margin: 16px 20px 24px;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.dashboard-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.dashboard-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tab-navigation-group {
+  display: flex;
+  border: 1px solid #cbd5e1;
+  padding: 2px;
+  background-color: #f1f5f9;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+    margin: 12px 12px 16px;
+    padding: 16px;
+    gap: 16px;
+  }
+  .dashboard-header-left {
+    justify-content: flex-start;
+  }
+  .dashboard-header-right {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .tab-navigation-group {
+    width: 100%;
+    justify-content: space-around;
+  }
+  .tab-navigation-group button {
+    flex: 1;
+    text-align: center;
+    padding: 8px 6px !important;
+  }
+  .dashboard-header-right .btn-danger {
+    width: 100%;
+    justify-content: center;
+  }
+}
+

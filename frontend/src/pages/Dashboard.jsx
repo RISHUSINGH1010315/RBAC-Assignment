@@ -227,17 +227,8 @@ const Dashboard = () => {
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f8fafc' }}>
       
       {/* Navbar Header - Official flat border */}
-      <header className="glass-panel" style={{
-        margin: '16px 20px 24px',
-        padding: '12px 24px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: '#ffffff',
-        border: '1px solid #e2e8f0',
-        borderRadius: '0px'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <header className="dashboard-header">
+        <div className="dashboard-header-left">
           <div style={{ 
             fontSize: '18px', 
             fontWeight: '900', 
@@ -256,9 +247,9 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div className="dashboard-header-right">
           {/* Dashboard Tab Navigation Options */}
-          <div style={{ display: 'flex', border: '1px solid #cbd5e1', padding: '2px', backgroundColor: '#f1f5f9' }}>
+          <div className="tab-navigation-group">
             <button 
               onClick={() => setActiveTab('tasks')}
               style={{
