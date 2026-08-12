@@ -5,6 +5,8 @@ import {
   Plus, Edit3, Trash2, Calendar, UserCheck, Activity, Search
 } from 'lucide-react';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const Dashboard = () => {
   const { user, token, logout } = useAuth();
   const [tasks, setTasks] = useState([]);
@@ -44,7 +46,7 @@ const Dashboard = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/tasks', {
+      const response = await fetch(`${API_URL}/api/tasks`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.ok) {
@@ -60,7 +62,7 @@ const Dashboard = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/users', {
+      const response = await fetch(`${API_URL}/api/users`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.ok) {
@@ -74,7 +76,7 @@ const Dashboard = () => {
 
   const fetchAuditLogs = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/logs', {
+      const response = await fetch(`${API_URL}/api/logs`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.ok) {
@@ -88,7 +90,7 @@ const Dashboard = () => {
 
   const handleCreateOrUpdateTask = async (e) => {
     e.preventDefault();
-    const endpoint = isEditing ? `http://localhost:5000/api/tasks/${currentTaskId}` : 'http://localhost:5000/api/tasks';
+    const endpoint = isEditing ? `${API_URL}/api/tasks/${currentTaskId}` : `${API_URL}/api/tasks`;
     const method = isEditing ? 'PUT' : 'POST';
 
     const payload = {
@@ -128,7 +130,7 @@ const Dashboard = () => {
 
   const handleUserRoleChange = async (userId, newRole) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/users/${userId}/role`, {
+      const response = await fetch(`${API_URL}/api/users/${userId}/role`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -151,7 +153,7 @@ const Dashboard = () => {
   const handleUserDelete = async (userId) => {
     if (!confirm('Are you sure you want to delete this user?')) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/users/${userId}`, {
+      const response = await fetch(`${API_URL}/api/users/${userId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -193,7 +195,7 @@ const Dashboard = () => {
   const deleteTask = async (taskId) => {
     if (!confirm('Are you sure you want to delete this task?')) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+      const response = await fetch(`${API_URL}/api/tasks/${taskId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
