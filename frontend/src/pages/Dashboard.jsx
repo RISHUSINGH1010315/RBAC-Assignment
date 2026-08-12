@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { 
   LogOut, Shield, Users, CheckCircle, Clock, AlertTriangle, 
-  Plus, Edit3, Trash2, Calendar, UserCheck, Activity
+  Plus, Edit3, Trash2, Calendar, UserCheck, Activity, Search
 } from 'lucide-react';
 
 const Dashboard = () => {
@@ -11,6 +11,10 @@ const Dashboard = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [auditLogs, setAuditLogs] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Search and Filter States
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All');
 
   // Form states for Create/Edit task
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -207,6 +211,15 @@ const Dashboard = () => {
   const completedCount = tasks.filter(t => t.status === 'Completed').length;
   const inProgressCount = tasks.filter(t => t.status === 'In Progress').length;
   const pendingCount = tasks.filter(t => t.status === 'Pending').length;
+
+  // Search & Filter Operations logic
+  const filteredTasks = tasks.filter((task) => {
+    const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          (task.assignedTo?.name || '').toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === 'All' ? true : task.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f8fafc' }}>
@@ -475,28 +488,57 @@ const Dashboard = () => {
 
             {/* Task Area Table Card */}
             <div className="glass-panel" style={{ padding: '24px', backgroundColor: '#ffffff', border: '1px solid #e2e8f0' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
-                <div>
-                  <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a' }}>Active Task Logs</h3>
-                  <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                    {user.role === 'User' ? 'View status logs of tasks assigned to your node.' : 'Create, assign, or modify tasks.'}
-                  </p>
+              
+              {/* Search, Filters, and New Task Header Area */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+                  <div>
+                    <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a' }}>Active Task Logs</h3>
+                    <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                      {user.role === 'User' ? 'View status logs of tasks assigned to your node.' : 'Create, assign, or modify tasks.'}
+                    </p>
+                  </div>
+
+                  {(user.role === 'Admin' || user.role === 'Manager') && (
+                    <button className="btn btn-primary" onClick={openCreateModal} style={{ borderRadius: '0px' }}>
+                      <Plus size={14} />
+                      New Task Entry
+                    </button>
+                  )}
                 </div>
 
-                {(user.role === 'Admin' || user.role === 'Manager') && (
-                  <button className="btn btn-primary" onClick={openCreateModal} style={{ borderRadius: '0px' }}>
-                    <Plus size={14} />
-                    New Task Entry
-                  </button>
-                )}
+                {/* Filter and Search Bar Controls - Enterprise Layout */}
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                  <div style={{ position: 'relative', flex: 1, minWidth: '240px' }}>
+                    <Search size={15} color="var(--text-secondary)" style={{ position: 'absolute', left: '10px', top: '10px' }} />
+                    <input
+                      type="text"
+                      placeholder="Search tasks by title, description or assignee name..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      style={{ width: '100%', paddingLeft: '32px', height: '36px' }}
+                    />
+                  </div>
+
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    style={{ minWidth: '150px', height: '36px' }}
+                  >
+                    <option value="All">Filter: All Statuses</option>
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                  </select>
+                </div>
               </div>
 
               {/* Tasks List Table */}
               {loading ? (
                 <div style={{ textAlign: 'center', padding: '30px', color: 'var(--text-secondary)' }}>Retrieving server tasks...</div>
-              ) : tasks.length === 0 ? (
+              ) : filteredTasks.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '30px', color: 'var(--text-secondary)', border: '1px dashed #cbd5e1' }}>
-                  No records stored.
+                  No records matching the search/filter criteria.
                 </div>
               ) : (
                 <div style={{ overflowX: 'auto' }}>
@@ -511,7 +553,7 @@ const Dashboard = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {tasks.map((task) => (
+                      {filteredTasks.map((task) => (
                         <tr key={task._id} style={{ borderBottom: '1px solid #e2e8f0' }}>
                           <td style={{ padding: '14px 12px' }}>
                             <div style={{ fontWeight: '700', color: '#0f172a' }}>{task.title}</div>
